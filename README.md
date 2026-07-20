@@ -1,16 +1,22 @@
 # 🧰 Toolbox
 
-A collection of practical Python utilities and command-line tools designed to simplify common development, data processing, and project maintenance tasks.
+A collection of practical Python utilities and command-line tools designed to simplify common software development, data processing, database maintenance, project cleanup, automation, and documentation tasks.
 
-Each tool is self-contained and includes its own documentation, usage examples, and requirements.
+Each tool is maintained in its own directory and includes dedicated documentation, usage examples, and tool-specific requirements.
 
 ---
 
 ## 🎯 Purpose
 
-This repository serves as a personal toolbox of reusable scripts and utilities that solve real-world problems encountered during software development, database analysis, automation, and documentation workflows.
+This repository serves as a centralized toolbox of reusable scripts and utilities created to solve recurring engineering problems.
 
-The goal is to keep useful tools organized in a single place while maintaining separate documentation for each utility.
+Its goals are to:
+
+* Keep practical development tools organized in one repository
+* Avoid rewriting the same utility for multiple projects
+* Make each tool independently usable and maintainable
+* Provide safe command-line workflows for destructive operations
+* Preserve clear documentation and usage examples for every utility
 
 ---
 
@@ -28,7 +34,7 @@ A command-line utility that recursively scans a project directory and combines t
 * Project archiving
 * Source code sharing
 
-**Key Features**
+**Key features:**
 
 * Recursive directory traversal
 * Automatic file path headers
@@ -40,9 +46,43 @@ A command-line utility that recursively scans a project directory and combines t
 
 ---
 
+### 🧱 Scaffolding Cleanup
+
+A generic command-line utility for discovering and safely removing dead scaffolding from Python projects without relying on project-specific paths or hard-coded package names.
+
+The tool uses a dry-run-first workflow and can inspect empty files, empty directories, README-only placeholder directories, and optionally empty Python functions or methods.
+
+**Use cases:**
+
+* Removing abandoned architecture placeholders
+* Cleaning empty Python modules
+* Deleting README-only planning directories
+* Preparing a project before refactoring
+* Detecting unused scaffolding after code migration
+* Validating that cleanup did not affect protected files
+
+**Key features:**
+
+* Dynamic project selection through `--project-root`
+* Configurable scan roots, exclusions, and protected paths
+* Empty Python file detection
+* Empty and placeholder-only directory detection
+* Optional empty-function and empty-method cleanup
+* Python import and file-path reference checks
+* Dry-run mode by default
+* Optional backup creation before applying changes
+* JSON cleanup manifest generation
+* Protected-file hash verification
+* Configurable import-smoke and test commands
+* Separate cleanup and post-cleanup validation commands
+
+📖 See: `Scaffolding_Cleanup/README.md`
+
+---
+
 ### 🗄 SQLite Database Preview Tool
 
-A lightweight utility for inspecting SQLite databases and exporting table structures along with sample records into a readable text report.
+A lightweight utility for inspecting SQLite databases and exporting table structures together with sample records into a readable text report.
 
 **Use cases:**
 
@@ -52,7 +92,7 @@ A lightweight utility for inspecting SQLite databases and exporting table struct
 * Documentation generation
 * Quick database inspection
 
-**Key Features**
+**Key features:**
 
 * Automatic table discovery
 * Schema extraction
@@ -63,6 +103,7 @@ A lightweight utility for inspecting SQLite databases and exporting table struct
 📖 See: `SQLite_Database_Preview/README.md`
 
 ---
+
 ### 🧹 SQL Insert Cleaner
 
 A lightweight utility for cleaning and transforming SQL `INSERT INTO` statements by removing unwanted columns and optionally renaming destination tables.
@@ -75,9 +116,9 @@ A lightweight utility for cleaning and transforming SQL `INSERT INTO` statements
 * SQL dump transformation
 * Schema refactoring
 
-**Key Features**
+**Key features:**
 
-* SQL INSERT parsing
+* SQL `INSERT` parsing
 * Flexible column exclusion rules
 * Table renaming support
 * Regex-based filtering
@@ -92,7 +133,7 @@ A lightweight utility for cleaning and transforming SQL `INSERT INTO` statements
 
 A command-line utility for deleting rows from database tables based on a specified date using `DATE`, `DATETIME`, or `TIMESTAMP` columns.
 
-Supports multiple database engines through SQLAlchemy and includes a safe dry-run mode to preview deletions before execution.
+It supports multiple database engines through SQLAlchemy and includes a safe dry-run mode for previewing affected rows before deletion.
 
 **Use cases:**
 
@@ -100,13 +141,13 @@ Supports multiple database engines through SQLAlchemy and includes a safe dry-ru
 * Removing daily import records
 * ETL reruns
 * Test data reset
-* Scheduled maintenance tasks
+* Scheduled database maintenance
 
-**Key Features**
+**Key features:**
 
-* Multi-database support (DuckDB, SQLite, PostgreSQL, MySQL, SQL Server)
+* Multi-database support for DuckDB, SQLite, PostgreSQL, MySQL, and SQL Server
 * Automatic table discovery
-* Automatic date/time column detection
+* Automatic date and time column detection
 * Dry-run mode by default
 * Interactive confirmation before deletion
 * Single-table or all-table processing
@@ -117,18 +158,22 @@ Supports multiple database engines through SQLAlchemy and includes a safe dry-ru
 
 ## 🚀 Why This Repository Exists
 
-Over time, many small utilities are created to solve recurring development tasks. Storing them across multiple repositories can make discovery and maintenance difficult.
+Small utilities are often created while solving real project problems. When these scripts remain scattered across projects, they become difficult to discover, reuse, test, and maintain.
 
 This repository provides a centralized location for:
 
-* Reusable scripts
-* Development utilities
-* Database tools
+* Reusable development scripts
+* Project maintenance utilities
+* Database inspection and cleanup tools
+* SQL transformation tools
 * Automation helpers
 * Documentation generators
+* Safe command-line workflows
 
+Each project remains isolated inside its own directory so that it can evolve independently without creating unnecessary dependencies between tools.
 
 ---
+
 ## 📁 Repository Structure
 
 ```text
@@ -137,6 +182,12 @@ toolbox/
 ├── Project_File_Collector/
 │   ├── README.md
 │   └── ...
+│
+├── Scaffolding_Cleanup/
+│   ├── README.md
+│   ├── scaffolding_cleanup.py
+│   ├── cleanup_dead_scaffolding.py
+│   └── validate_dead_scaffolding_cleanup.py
 │
 ├── SQLite_Database_Preview/
 │   ├── README.md
@@ -150,8 +201,10 @@ toolbox/
 │   ├── README.md
 │   └── ...
 │
+├── LICENSE
 └── README.md
 ```
+
 ---
 
 ## 🛠 Requirements
@@ -159,9 +212,27 @@ toolbox/
 Most tools are built with:
 
 * Python 3.9+
-* Standard Library only (whenever possible)
+* The Python Standard Library whenever possible
+* Command-line execution on Windows, Linux, or macOS
 
-Individual requirements may vary and are documented inside each tool's directory.
+Some tools may require a newer Python version or additional packages. For example, `Scaffolding_Cleanup` requires Python 3.10+.
+
+Tool-specific dependencies and setup instructions are documented in each project's `README.md` file.
+
+---
+
+## 🛡 Safety Principles
+
+Utilities that modify source files or database records should follow a safe execution model whenever possible:
+
+1. Preview the operation using dry-run mode
+2. Review detected files, directories, or database rows
+3. Protect important paths and data files
+4. Create backups when supported
+5. Apply the operation explicitly
+6. Run the provided validation command afterward
+
+These safeguards are especially important for tools such as `Scaffolding_Cleanup` and `Rows_Delete_by_Date`.
 
 ---
 
@@ -169,13 +240,15 @@ Individual requirements may vary and are documented inside each tool's directory
 
 Planned categories include:
 
-* File Processing Tools
-* Database Utilities
-* SQL Transformation Tools
-* Data Cleaning Scripts
-* Automation Helpers
-* CLI Productivity Tools
-* Documentation Generators
+* File processing tools
+* Database utilities
+* SQL transformation tools
+* Data cleaning scripts
+* Project maintenance tools
+* Automation helpers
+* CLI productivity tools
+* Documentation generators
+* Validation and auditing utilities
 
 ---
 
@@ -183,11 +256,15 @@ Planned categories include:
 
 Contributions, bug reports, and feature suggestions are welcome.
 
-Feel free to:
+To contribute:
 
 1. Fork the repository
 2. Create a feature branch
-3. Submit a Pull Request
+3. Add or update the relevant documentation
+4. Include tests or validation instructions when applicable
+5. Submit a pull request
+
+Each new utility should remain self-contained and include its own `README.md` file.
 
 ---
 
@@ -195,7 +272,7 @@ Feel free to:
 
 This repository is licensed under the MIT License.
 
-See the LICENSE file for details.
+See the `LICENSE` file for details.
 
 ---
 
@@ -203,4 +280,4 @@ See the LICENSE file for details.
 
 Created and maintained by Kousha Zhiyani.
 
-A growing collection of practical tools built to solve everyday engineering problems.
+A growing collection of practical tools built to solve everyday software engineering and data-processing problems.
